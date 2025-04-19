@@ -61,3 +61,24 @@ function createEmployee(salary: number | string): Director | Teacher {
 console.log(createEmployee(200));
 console.log(createEmployee(1000));
 console.log(createEmployee('$500'));
+
+
+// Type predicate function to check if an employee is a Director
+function isDirector(employee: Teacher | Director): employee is Director {
+  return (employee as Director).workDirectorTasks !== undefined;
+}
+
+// Function that executes work based on employee type
+function executeWork(employee: Teacher | Director): string {
+  if (isDirector(employee)) {
+    // TypeScript knows employee is Director here
+    return employee.workDirectorTasks();
+  } else {
+    // TypeScript knows employee is Teacher here
+    return employee.workTeacherTasks();
+  }
+}
+
+console.log(executeWork(createEmployee(200)));     //  Getting to work
+console.log(executeWork(createEmployee(1000)));    //  Getting to director tasks
+
