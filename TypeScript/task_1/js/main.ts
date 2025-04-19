@@ -1,3 +1,4 @@
+// Define the Teacher interface according to the requirements
 interface Teacher {
   readonly firstName: string;  // Can only be set during initialization
   readonly lastName: string;   // Can only be set during initialization
@@ -24,7 +25,7 @@ const teacher2: Teacher = {
   contract: true  // Additional property allowed by the index signature
 };
 
-// Example from the task
+// Example from Task 1
 const teacher3: Teacher = {
   firstName: 'John',
   fullTimeEmployee: false,
@@ -33,7 +34,32 @@ const teacher3: Teacher = {
   contract: false,
 };
 
-// Log the teacher objects
-console.log(teacher1);
-console.log(teacher2);
 console.log(teacher3);
+
+// Directors interface extends Teacher
+interface Directors extends Teacher {
+  numberOfReports: number;
+}
+
+// Example from Task 2
+const director1: Directors = {
+  firstName: 'John',
+  lastName: 'Doe',
+  location: 'London',
+  fullTimeEmployee: true,
+  numberOfReports: 17,
+};
+
+console.log(director1);
+
+// Additional example showing optional properties
+const director2: Directors = {
+  firstName: 'Jane',
+  lastName: 'Smith',
+  location: 'New York',
+  fullTimeEmployee: false,
+  numberOfReports: 5,
+  contract: true  // Additional property from the index signature
+};
+
+console.log(director2);
