@@ -1,0 +1,14 @@
+/* Styles for the counter text and button */
+#counter {
+  font-weight: bold;
+  position: absolute;
+  right: 0;
+}
+
+/* Styling the logo with a background image */
+#logo {
+  width: 200px;
+  height: 200px;
+  background-image: url('../assets/holberton-logo.jpg');
+  background-size: cover;
+}
