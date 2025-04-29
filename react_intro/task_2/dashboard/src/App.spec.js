@@ -17,7 +17,7 @@ describe('App component', () => {
     
     // Check app-footer paragraph - using a regex to match the dynamic year
     const currentYear = new Date().getFullYear();
-    const footerParagraph = screen.getByText(new RegExp(`copyright ${currentYear} - holberton school`, 'i'));
+    const footerParagraph = screen.getByText(new RegExp(`copyright ${currentYear} - holberton school main dashboard`, 'i'));
     expect(footerParagraph).toBeInTheDocument();
   });
 
@@ -25,5 +25,31 @@ describe('App component', () => {
     render(<App />);
     const logoImage = screen.getByAltText(/holberton logo/i);
     expect(logoImage).toBeInTheDocument();
+  });
+
+  // New tests for the sign-in form
+  it('renders 2 input elements', () => {
+    render(<App />);
+    const inputElements = screen.getAllByRole('textbox') // This gets all text inputs (note: password inputs have a different role)
+      .concat(screen.getAllByLabelText(/password/i)); // This adds the password input specifically
+    
+    expect(inputElements.length).toBe(2);
+  });
+
+  it('renders labels for email and password inputs', () => {
+    render(<App />);
+    const emailLabel = screen.getByLabelText(/email/i);
+    const passwordLabel = screen.getByLabelText(/password/i);
+    
+    expect(emailLabel).toBeInTheDocument();
+    expect(passwordLabel).toBeInTheDocument();
+  });
+
+  it('renders a button with text "OK"', () => {
+    render(<App />);
+    const buttonElement = screen.getByRole('button', { name: /ok/i });
+    
+    expect(buttonElement).toBeInTheDocument();
+    expect(buttonElement.textContent).toMatch(/ok/i);
   });
 });
