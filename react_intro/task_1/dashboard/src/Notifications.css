@@ -1,0 +1,9 @@
+.notifications {
+  border: 2px dashed #e1003c;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.root-notifications {
+  padding: 10px;
+}
