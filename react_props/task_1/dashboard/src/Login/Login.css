@@ -1,0 +1,10 @@
+.App-body {
+  flex-grow: 1;
+  text-align: left;
+  padding: 40px;
+}
+.App-body label,
+.App-body input,
+.App-body button {
+  margin-right: 10px;
+}
