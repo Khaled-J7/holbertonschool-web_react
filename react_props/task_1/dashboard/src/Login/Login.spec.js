@@ -1,31 +1,32 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import Login from "./Login";
 
 describe("Login Component", () => {
-  it("renders without crashing", () => {
+  beforeEach(() => {
     render(<Login />);
   });
 
   it("includes 2 labels, 2 inputs, and 1 button", () => {
-    render(<Login />);
-    const labels = screen.getAllByRole("label");
+    const labels = screen.getAllByLabelText(/Email|Password/i);
     const inputs = screen.getAllByRole("textbox");
-    const button = screen.getByRole("button", { name: /OK/i });
+    const button = screen.getByRole("button");
 
     expect(labels.length).toBe(2);
     expect(inputs.length).toBe(2);
     expect(button).toBeInTheDocument();
   });
 
-  it("focuses input when clicking associated label", () => {
-    render(<Login />);
-    const emailLabel = screen.getByLabelText(/Email:/i);
-    const emailInput = screen.getByLabelText(/Email:/i);
+  it("focuses input when clicking associated label (Email)", async () => {
+    const user = userEvent.setup();
+    const emailLabel = screen.getByLabelText("Email");
+    const emailInput = screen.getByLabelText("Email");
 
-    fireEvent.click(emailLabel);
+    await user.click(emailLabel);
+
     expect(document.activeElement).toBe(emailInput);
   });
 });

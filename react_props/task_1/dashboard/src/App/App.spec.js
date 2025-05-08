@@ -9,27 +9,23 @@ import Footer from "../Footer/Footer";
 import Notifications from "../Notifications/Notifications";
 
 describe("App Component", () => {
-  it("renders without crashing", () => {
+  beforeEach(() => {
     render(<App />);
   });
 
   it("contains the Notifications component", () => {
-    render(<App />);
     expect(screen.getByText(/Here is the list of notifications/i)).toBeInTheDocument();
   });
 
   it("contains the Header component", () => {
-    render(<App />);
-    expect(screen.getByRole("banner")).toBeInTheDocument(); // header role
+    expect(screen.getByRole("banner")).toBeInTheDocument(); // <header role="banner">
   });
 
   it("contains the Login component", () => {
-    render(<App />);
     expect(screen.getByText(/Login to access the full dashboard/i)).toBeInTheDocument();
   });
 
   it("contains the Footer component", () => {
-    render(<App />);
-    expect(screen.getByRole("contentinfo")).toBeInTheDocument(); // footer role
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument(); // <footer role="contentinfo">
   });
 });

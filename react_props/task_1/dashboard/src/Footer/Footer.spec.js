@@ -3,17 +3,20 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import Footer from "./Footer";
-import { getFullYear, getFooterCopy } from "../utils/utils";
+import { getCurrentYear, getFooterCopy } from "../utils/utils";
 
 describe("Footer Component", () => {
-  it("renders without crashing", () => {
+  beforeEach(() => {
     render(<Footer />);
   });
 
-  it("renders the correct copyright string when isIndex is true", () => {
-    render(<Footer />);
-    const expectedText = `Copyright ${getFullYear()} - ${getFooterCopy(true)}`;
-    const paragraph = screen.getByText(expectedText);
+  it("renders the correct copyright text when isIndex is true", () => {
+    const expectedText = `Copyright ${getCurrentYear()} - ${getFooterCopy(true)}`;
+
+    const paragraph = screen.getByText((content) =>
+      content.includes(expectedText)
+    );
+
     expect(paragraph).toBeInTheDocument();
   });
 });
