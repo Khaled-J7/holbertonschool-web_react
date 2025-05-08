@@ -1,0 +1,36 @@
+.notifications{
+    padding: 10px;
+    padding-right: 0px;
+    margin-bottom: 10px;
+    border: 3px dotted;
+    border-color: #e1003c;
+}
+
+[aria-label="Close"] img {
+    height: 10px;
+    width: 10px;
+}
+
+.notifications p {
+    display: inline-block;
+    width: 97%;
+    margin: 0px;
+}
+
+[aria-label="Close"] {
+    border: none;
+    background-color: white;
+    text-align: right;
+}
+
+[data-priority="default"] {
+    color: blue;
+}
+
+[data-priority="urgent"] {
+    color: red;
+}
+
+[data-priority="urgent"] + li {
+    color: red;
+}
