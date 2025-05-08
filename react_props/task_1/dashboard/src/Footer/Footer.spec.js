@@ -11,7 +11,9 @@ describe("Footer Component", () => {
   });
 
   it("renders the correct copyright text when isIndex is true", () => {
-    const expectedText = `Copyright ${getCurrentYear()} - ${getFooterCopy(true)}`;
+    const expectedText = `Copyright ${getCurrentYear()} - ${getFooterCopy(
+      true
+    )}`;
 
     const paragraph = screen.getByText((content) =>
       content.includes(expectedText)

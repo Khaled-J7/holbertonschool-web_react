@@ -11,7 +11,9 @@ describe("Notifications Component", () => {
   });
 
   it("displays the notification title", () => {
-    expect(screen.getByText(/Here is the list of notifications/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Here is the list of notifications/i)
+    ).toBeInTheDocument();
   });
 
   it("renders three list items", () => {

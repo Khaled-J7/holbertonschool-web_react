@@ -14,7 +14,9 @@ describe("App Component", () => {
   });
 
   it("contains the Notifications component", () => {
-    expect(screen.getByText(/Here is the list of notifications/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Here is the list of notifications/i)
+    ).toBeInTheDocument();
   });
 
   it("contains the Header component", () => {
@@ -22,7 +24,9 @@ describe("App Component", () => {
   });
 
   it("contains the Login component", () => {
-    expect(screen.getByText(/Login to access the full dashboard/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Login to access the full dashboard/i)
+    ).toBeInTheDocument();
   });
 
   it("contains the Footer component", () => {
