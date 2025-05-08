@@ -1,20 +1,25 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import Header from "./Header.jsx";
+import "@testing-library/jest-dom";
 
-describe("Header component", () => {
-  it("is the header rendered", () => {
+import Header from "./Header";
+
+describe("Header Component", () => {
+  it("renders without crashing", () => {
     render(<Header />);
-    const h1elem = screen.getByRole("heading");
-    expect(h1elem).toBeInTheDocument();
   });
-  it("is the image rendred", () => {
+
+  it("contains the Holberton logo", () => {
     render(<Header />);
-    const img = screen.getByAltText("holberton logo");
-    expect(img).toBeInTheDocument();
+    const logo = screen.getByAltText("logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("src", expect.stringContaining("holberton-logo.jpg"));
   });
-  it("checking if the h1 is with the correct text", () => {
+
+  it("contains an h1 element with the correct text", () => {
     render(<Header />);
-    const h1elem = screen.getByRole("heading");
-    expect(h1elem.textContent).toBe("School dashboard");
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading).toBeInTheDocument();
+    expect(heading).toHaveTextContent("School dashboard");
   });
 });

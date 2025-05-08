@@ -1,31 +1,35 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import Login from "../Login/Login.jsx";
-import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
-import Notifications from "../Notifications/Notifications.jsx";
+import "@testing-library/jest-dom";
 
-test("testing if header is rendered", () => {
-  render(<Header />);
-  const h = screen.getByRole("heading");
-  expect(h).toBeInTheDocument();
-});
+import App from "./App";
+import Header from "../Header/Header";
+import Login from "../Login/Login";
+import Footer from "../Footer/Footer";
+import Notifications from "../Notifications/Notifications";
 
-test("checking if login is rendered", () => {
-  render(<Login />);
-  const l = screen.getByText("Login to access the full dashboard");
-  expect(l).toBeInTheDocument();
-});
+describe("App Component", () => {
+  it("renders without crashing", () => {
+    render(<App />);
+  });
 
-test("checking if footer is rendered", () => {
-  render(<Footer />);
-  const f = screen.getByText(
-    "Copyright 2025 - Holberton School main dashboard"
-  );
-  expect(f).toBeInTheDocument();
-});
+  it("contains the Notifications component", () => {
+    render(<App />);
+    expect(screen.getByText(/Here is the list of notifications/i)).toBeInTheDocument();
+  });
 
-test("checking if notifications is rendered", () => {
-  render(<Notifications />);
-  const n = screen.getByText("Here is the list of notifications");
-  expect(n).toBeInTheDocument();
+  it("contains the Header component", () => {
+    render(<App />);
+    expect(screen.getByRole("banner")).toBeInTheDocument(); // header role
+  });
+
+  it("contains the Login component", () => {
+    render(<App />);
+    expect(screen.getByText(/Login to access the full dashboard/i)).toBeInTheDocument();
+  });
+
+  it("contains the Footer component", () => {
+    render(<App />);
+    expect(screen.getByRole("contentinfo")).toBeInTheDocument(); // footer role
+  });
 });

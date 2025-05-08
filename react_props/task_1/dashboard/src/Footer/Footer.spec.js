@@ -1,21 +1,19 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import Footer from "./Footer.jsx";
-import * as myModule from "../utils/utils.js";
+import "@testing-library/jest-dom";
 
-describe("Footer component", () => {
-  it("if the footer paragraph rendred", () => {
+import Footer from "./Footer";
+import { getFullYear, getFooterCopy } from "../utils/utils";
+
+describe("Footer Component", () => {
+  it("renders without crashing", () => {
     render(<Footer />);
-    const p = screen.getByText(
-      "Copyright 2025 - Holberton School main dashboard"
-    );
-    expect(p).toBeInTheDocument();
   });
-  it("checking if the footer renderes the correct paragraph content when the argument of getFooterCopy is true", () => {
-    jest
-      .spyOn(myModule, "getFooterCopy")
-      .mockImplementation(() => "Holberton School");
+
+  it("renders the correct copyright string when isIndex is true", () => {
     render(<Footer />);
-    const p = screen.getByText("Copyright 2025 - Holberton School");
-    expect(p).toBeInTheDocument();
+    const expectedText = `Copyright ${getFullYear()} - ${getFooterCopy(true)}`;
+    const paragraph = screen.getByText(expectedText);
+    expect(paragraph).toBeInTheDocument();
   });
 });
