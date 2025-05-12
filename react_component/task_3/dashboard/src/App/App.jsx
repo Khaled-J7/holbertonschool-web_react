@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
+
+// Components
 import Notifications from "../Notifications/Notifications.jsx";
 import Header from "../Header/Header.jsx";
 import Footer from "../Footer/Footer.jsx";
 import Login from "../Login/Login.jsx";
 import CourseList from "../CourseList/CourseList.jsx";
-import PropTypes from "prop-types";
+import BodySection from "../BodySection/BodySection";
+import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom";
+
+// Utils
 import { getLatestNotification } from "../utils/utils.js";
 
 class App extends Component {
@@ -59,9 +64,23 @@ class App extends Component {
           <Notifications notifications={this.notificationsList} displayDrawer={true} />
         </div>
         <Header />
-        <div className="mainSection">
-          {isLoggedIn ? <CourseList courses={this.coursesList} /> : <Login />}
-        </div>
+
+        {/* News Section */}
+        <BodySection title="News from the School">
+          <p>Holberton School News goes here</p>
+        </BodySection>
+
+        {/* Conditional Rendering */}
+        {isLoggedIn ? (
+          <BodySectionWithMarginBottom title="Course list">
+            <CourseList courses={this.coursesList} />
+          </BodySectionWithMarginBottom>
+        ) : (
+          <BodySectionWithMarginBottom title="Log in to continue">
+            <Login />
+          </BodySectionWithMarginBottom>
+        )}
+
         <Footer />
       </>
     );
