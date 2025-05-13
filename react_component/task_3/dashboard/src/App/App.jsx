@@ -1,78 +1,77 @@
-import "./App.css";
-import Notifications from "../Notifications/Notifications.jsx";
-import Header from "../Header/Header.jsx";
-import Footer from "../Footer/Footer.jsx";
-import Login from "../Login/Login.jsx";
-import BodySecion from "../BodySection/BodySection.jsx";
-import BodySecionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom.jsx";
-import { Fragment, Component } from "react";
-import { getLatestNotification } from "../utils/utils.js";
-import { v4 as uuidv4 } from "uuid";
-import CourseList from "../CourseList/CourseList.jsx";
-import PropTypes from "prop-types";
+import React from 'react';
+import Notifications from '../Notifications/Notifications'
+import Header from '../Header/Header'
+import Login from '../Login/Login'
+import CourseList from '../CourseList/CourseList'
+import Footer from '../Footer/Footer'
+import PropTypes from 'prop-types'; // ES6
+import { getLatestNotification } from '../utils/utils'
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom'
+import BodySection from '../BodySection/BodySection'
+import './App.css'
 
-class App extends Component {
-  notificationsList = [
-    { id: uuidv4(), type: "default", value: "New course available" },
-    { id: uuidv4(), type: "urgent", value: "New resume available" },
-    { id: uuidv4(), type: "urgent", HTML: getLatestNotification() },
-  ];
-  coursesList = [
-    { id: uuidv4(), name: "ES6", credit: 60 },
-    { id: uuidv4(), name: "Webpack", credit: 20 },
-    { id: uuidv4(), name: "React", credit: 40 },
-  ];
+const listCourses = [
+  { id: 1, name: 'ES6', credit: 60 },
+  { id: 2, name: 'Webpack', credit: 20 },
+  { id: 3, name: 'React', credit: 40 }
+];
 
-  eventFunction = (e) => {
-    if (e.ctrlKey && (e.key == "h" || e.key == "H")) {
-      alert("Logging you out");
-      this.props.logOut();
-    }
-  };
+const listNotifications = [
+  { id: 1, type: 'default', value: 'New course available' },
+  { id: 2, type: 'urgent', value: 'New resume available' },
+  { id: 3, type: 'urgent', html: { __html: getLatestNotification()} }
+];
 
-  componentDidMount() {
-    let bodyElem = document.body;
-    bodyElem.addEventListener("keydown", this.eventFunction);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillUnmount() {
-    let bodyElem = document.body;
-    bodyElem.removeEventListener("keydown", this.eventFunction);
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleClick);
+  }
+
+  handleClick(event) {
+    if (event.keyCode === 72 && event.ctrlKey) {
+      alert('Logging you out');
+      this.props.logOut();
+    }
   }
 
   render() {
     return (
-      <Fragment>
-        <div className="root-notifications">
-          <Notifications
-            notifications={this.notificationsList}
-            displayDrawer={true}
-          />
+      <React.Fragment>
+        <Notifications listNotifications={listNotifications}></Notifications>
+        <div className='App'>
+          <Header></Header>
+          <div className='App-body'>
+            {this.props.isLoggedIn ? 
+              <BodySectionWithMarginBottom title='Course list'>
+                <CourseList listCourses={listCourses} ></CourseList>
+              </BodySectionWithMarginBottom> : 
+              <BodySectionWithMarginBottom title='Log in to continue'>
+                <Login></Login>
+              </BodySectionWithMarginBottom>}
+            <BodySection title='News from the School'>
+              <p>Some news</p>
+            </BodySection>
+          </div>
+          <Footer></Footer>
         </div>
-        <Header />
-        <div className="mainSection">
-          {this.props.isLoggedIn == true ? (
-            <BodySecionWithMarginBottom title="Course list">
-              <CourseList courses={this.coursesList}></CourseList>
-            </BodySecionWithMarginBottom>
-          ) : (
-            <BodySecionWithMarginBottom title="Log in to continue">
-              <Login />
-            </BodySecionWithMarginBottom>
-          )}
-          <BodySecion title="News from the School">
-            <p>Holberton School News goes here</p>
-          </BodySecion>
-        </div>
-        <Footer />
-      </Fragment>
+      </React.Fragment>
     );
   }
 }
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
-  logOut: PropTypes.func,
+  logOut: PropTypes.func
+};
+
+App.defaultProps = {
+  isLoggedIn: false,
+  logOut: () => void(0)
 };
 
 export default App;
