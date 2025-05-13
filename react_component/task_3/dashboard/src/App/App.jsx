@@ -1,69 +1,67 @@
-import React, { Component } from 'react';
-import Notifications from '../Notifications/Notifications';
-import Header from '../Header/Header';
-import Login from '../Login/Login';
-import CourseList from '../CourseList/CourseList';
-import Footer from '../Footer/Footer';
-import BodySection from '../BodySection/BodySection';
-import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
-import './App.css';
-import PropTypes from 'prop-types';
-import { getLatestNotification } from '../../utils/utils';
+import React from "react";
+import Notifications from "../Notifications/Notifications";
+import Header from "../Header/Header";
+import Login from "../Login/Login";
+import CourseList from "../CourseList/CourseList";
+import Footer from "../Footer/Footer";
+import PropTypes from "prop-types"; // ES6
+import { getLatestNotification } from "../utils/utils";
+import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom";
+import BodySection from "../BodySection/BodySection";
+import "./App.css";
 
 const listCourses = [
-  { id: 1, name: 'ES6', credit: 60 },
-  { id: 2, name: 'Webpack', credit: 20 },
-  { id: 3, name: 'React', credit: 40 },
+  { id: 1, name: "ES6", credit: 60 },
+  { id: 2, name: "Webpack", credit: 20 },
+  { id: 3, name: "React", credit: 40 },
 ];
 
 const listNotifications = [
-  { id: 1, type: 'default', value: 'New course available' },
-  { id: 2, type: 'urgent', value: 'New resume available' },
-  { id: 3, type: 'urgent', html: getLatestNotification() },
+  { id: 1, type: "default", value: "New course available" },
+  { id: 2, type: "urgent", value: "New resume available" },
+  { id: 3, type: "urgent", html: { __html: getLatestNotification() } },
 ];
 
-class App extends Component {
-  handleKeyDown = (event) => {
-    const { logOut } = this.props;
-    if (event.ctrlKey && event.key === 'h') {
-      window.alert('Logging you out');
-      logOut();
-    }
-  };
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleClick);
+  }
+
+  handleClick(event) {
+    if (event.keyCode === 72 && event.ctrlKey) {
+      alert("Logging you out");
+      this.props.logOut();
+    }
   }
 
   render() {
-    const { isLoggedIn = false } = this.props;
-
     return (
-      <>
-        <div className="root-notifications">
-          <Notifications notifications={listNotifications} displayDrawer={true} />
+      <React.Fragment>
+        <Notifications listNotifications={listNotifications}></Notifications>
+        <div className="App">
+          <Header></Header>
+          <div className="App-body">
+            {this.props.isLoggedIn ? (
+              <BodySectionWithMarginBottom title="Course list">
+                <CourseList listCourses={listCourses}></CourseList>
+              </BodySectionWithMarginBottom>
+            ) : (
+              <BodySectionWithMarginBottom title="Log in to continue">
+                <Login></Login>
+              </BodySectionWithMarginBottom>
+            )}
+            <BodySection title="News from the School">
+              <p>Some news</p>
+            </BodySection>
+          </div>
+          <Footer></Footer>
         </div>
-        <Header />
-        <div className="mainSection">
-          {isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList courses={listCourses} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>Holberton School News goes here</p>
-          </BodySection>
-        </div>
-        <Footer />
-      </>
+      </React.Fragment>
     );
   }
 }
@@ -75,7 +73,7 @@ App.propTypes = {
 
 App.defaultProps = {
   isLoggedIn: false,
-  logOut: () => {},
+  logOut: () => void 0,
 };
 
 export default App;

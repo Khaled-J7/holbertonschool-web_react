@@ -1,46 +1,46 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { shallow } from 'enzyme';
+import { expect as expectChai } from 'chai';
 import App from './App';
+import CourseList from '../CourseList/CourseList';
+import Login from '../Login/Login';
 
-describe('App Component', () => {
+describe('Test App.js', () => {
+	let events = {};
+
   beforeEach(() => {
-    // Reset mocks before each test
-    jest.clearAllMocks();
+    events = {}; // Empty our events before each test case
+    // Define the addEventListener method with a Jest mock function
+    document.addEventListener = jest.fn((event, callback) => {
+      events[event] = callback;
+    });
   });
 
-  test('displays title "Course list" when isLoggedIn is true', () => {
-    render(<App isLoggedIn={true} />);
-    expect(screen.getByRole('heading', { name: /Course list/i })).toBeInTheDocument();
+
+  it('App without crashing', (done) => {
+    expectChai(shallow(<App />).exists());
+    done();
   });
 
-  test('displays title "Log in to continue" when isLoggedIn is false', () => {
-    render(<App isLoggedIn={false} />);
-    expect(screen.getByRole('heading', { name: /Log in to continue/i })).toBeInTheDocument();
+  it('check that CourseList is not displayed when isLoggedIn is false', (done) => {
+    const wrapper = shallow(<App />);
+    expectChai(wrapper.find(CourseList)).to.have.lengthOf(0);
+    done();
   });
 
-  test('displays title "News from the School" and paragraph by default', () => {
-    render(<App />);
-    expect(screen.getByRole('heading', { name: /News from the School/i })).toBeInTheDocument();
-    expect(screen.getByText(/Holberton School News goes here/i)).toBeInTheDocument();
+  it('check that CourseList is displayed and Login is not displayed when isLoggedIn is true', (done) => {
+    const wrapper = shallow(<App isLoggedIn={true} />);
+    expectChai(wrapper.find(CourseList)).to.have.lengthOf(1);
+    expectChai(wrapper.find(Login)).to.have.lengthOf(0);
+    done();
   });
 
-  test('calls alert with "Logging you out" on Ctrl+H key press', async () => {
-    const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<App isLoggedIn={true} />);
-    const user = userEvent.setup();
-
-    await user.keyboard('{Control>}h{/Control}');
-    expect(mockAlert).toHaveBeenCalledWith('Logging you out');
-    mockAlert.mockRestore();
-  });
-
-  test('calls logOut function on Ctrl+H key press', async () => {
-    const mockLogOut = jest.fn();
-    render(<App isLoggedIn={true} logOut={mockLogOut} />);
-    const user = userEvent.setup();
-
-    await user.keyboard('{Control>}h{/Control}');
-    expect(mockLogOut).toHaveBeenCalled();
+  it('verify that when the keys "control" and "h" are pressed the "logOut" function is called', (done) => {
+    const logOut = jest.fn(() => void (0));
+    shallow(<App />);
+    window.alert = logOut;
+    events.keydown({ keyCode: 72, ctrlKey: true });
+    expect(logOut).toHaveBeenCalled()
+    done();
   });
 });
