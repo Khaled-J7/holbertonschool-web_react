@@ -1,3 +1,4 @@
+import withLogging from "../HOC/WithLogging.jsx";
 import "./Login.css";
 
 function Login() {
@@ -17,4 +18,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default withLogging(Login);

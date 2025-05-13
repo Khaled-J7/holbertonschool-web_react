@@ -2,8 +2,9 @@ import CourseListRow from "./CourseListRow";
 import "./CourseList.css";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
+import withLogging from "../HOC/WithLogging.jsx";
 
-export default function CourseList({ courses = [] }) {
+function CourseList({ courses = [] }) {
   return (
     <>
       <table id="CourseList">
@@ -52,3 +53,5 @@ export default function CourseList({ courses = [] }) {
 CourseList.propTypes = {
   courses: PropTypes.array,
 };
+
+export default withLogging(CourseList);
