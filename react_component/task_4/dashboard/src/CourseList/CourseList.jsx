@@ -1,57 +1,53 @@
-import CourseListRow from "./CourseListRow";
+import React from "react";
 import "./CourseList.css";
-import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
-import withLogging from "../HOC/WithLogging.jsx";
+import CourseListRow from "./CourseListRow";
+import PropTypes from "prop-types"; // ES6
+import CourseShape from "./CourseShape";
 
-function CourseList({ courses = [] }) {
+function CourseList({ listCourses }) {
   return (
-    <>
+    <div className="container-course">
       <table id="CourseList">
         <thead>
-          {courses.length != 0 ? (
-            <>
-              <CourseListRow
-                key={uuidv4()}
-                isHeader={true}
-                textFirstCell={"Available courses"}
-              ></CourseListRow>
-              <CourseListRow
-                key={uuidv4()}
-                isHeader={true}
-                textFirstCell={"Course name"}
-                textSecondCell={"Credit"}
-              ></CourseListRow>
-            </>
-          ) : null}
+          <CourseListRow
+            isHeader={true}
+            textFirstCell="Available courses"
+          ></CourseListRow>
+          <CourseListRow
+            isHeader={true}
+            textFirstCell="Course name"
+            textSecondCell="Credit"
+          ></CourseListRow>
         </thead>
         <tbody>
-          {courses.length == 0 ? (
+          {listCourses.length === 0 ? (
             <CourseListRow
-              key={uuidv4()}
-              isHeader={true}
-              textFirstCell={"No course available yet"}
-            ></CourseListRow>
+              textFirstCell="No course available yet"
+              isHeader={false}
+            />
           ) : (
-            courses.map((obj) => {
-              return (
-                <CourseListRow
-                  key={uuidv4()}
-                  isHeader={false}
-                  textFirstCell={obj.name}
-                  textSecondCell={obj.credit}
-                ></CourseListRow>
-              );
-            })
+            <></>
           )}
+          {listCourses.map((course) => (
+            <CourseListRow
+              key={course.id}
+              textFirstCell={course.name}
+              textSecondCell={course.credit}
+              isHeader={false}
+            />
+          ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 }
 
-CourseList.propTypes = {
-  courses: PropTypes.array,
+CourseList.defaultProps = {
+  listCourses: [],
 };
 
-export default withLogging(CourseList);
+CourseList.propTypes = {
+  listCourses: PropTypes.arrayOf(CourseShape),
+};
+
+export default CourseList;
