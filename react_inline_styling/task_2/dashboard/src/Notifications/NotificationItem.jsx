@@ -1,68 +1,61 @@
-import React from "react";
 import PropTypes from "prop-types";
+import { v4 as uuid4 } from "uuid";
+import { PureComponent } from "react";
 import { StyleSheet, css } from "aphrodite";
 
-const NotificationItem = React.memo(function NotificationItem({
-  type,
-  value,
-  html,
-  markAsRead,
-  id,
-}) {
-  let listItem;
-
-  let typeStyle = css(type === "urgent" ? styles.urgent : styles.default);
-
-  if (value) {
-    listItem = (
-      <li
-        className={typeStyle}
-        data-notification-type={type}
-        onClick={() => markAsRead(id)}
-      >
-        {value}
-      </li>
-    );
-  } else {
-    listItem = (
-      <li
-        className={typeStyle}
-        data-notification-type={type}
-        dangerouslySetInnerHTML={html}
-        onClick={() => markAsRead(id)}
-      ></li>
-    );
-  }
-
-  return listItem;
-});
-
-NotificationItem.defaultProps = {
-  type: "default",
-  value: "",
-  html: {},
-  markAsRead: () => {},
-  id: NaN,
-};
-
-NotificationItem.propTypes = {
-  type: PropTypes.string,
-  value: PropTypes.string,
-  html: PropTypes.shape({
-    __html: PropTypes.string,
-  }),
-  markAsRead: PropTypes.func,
-  id: PropTypes.number,
-};
-
 const styles = StyleSheet.create({
-  default: {
+  defaultStyle: {
     color: "blue",
   },
-
-  urgent: {
+  urgentStyle: {
     color: "red",
   },
 });
+
+class NotificationItem extends PureComponent {
+  render() {
+    if (this.props.html != undefined) {
+      let id = uuid4();
+      let newfn = this.props.fn.bind(this, id);
+      return (
+        <li
+          key={id}
+          className={css(
+            this.props.type == "urgent"
+              ? styles.urgentStyle
+              : styles.defaultStyle
+          )}
+          dangerouslySetInnerHTML={{ __html: this.props.html }}
+          role="listitem"
+          onClick={newfn}
+        ></li>
+      );
+    } else {
+      let id = uuid4();
+      let newfn = this.props.fn.bind(this, id);
+      return (
+        <li
+          key={uuid4()}
+          className={css(
+            this.props.type == "urgent"
+              ? styles.urgentStyle
+              : styles.defaultStyle
+          )}
+          role="listitem"
+          onClick={newfn}
+        >
+          {this.props.value}
+        </li>
+      );
+    }
+  }
+}
+
+NotificationItem.propTypes = {
+  type: PropTypes.string,
+  html: PropTypes.string,
+  value: PropTypes.string,
+  fn: PropTypes.func,
+};
 
 export default NotificationItem;
