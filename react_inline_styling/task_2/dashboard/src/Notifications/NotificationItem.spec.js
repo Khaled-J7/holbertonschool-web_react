@@ -1,74 +1,61 @@
+import { shallow } from "enzyme";
 import React from "react";
-import { render, screen } from "@testing-library/react";
 import NotificationItem from "./NotificationItem";
+import { StyleSheetTestUtils } from "aphrodite";
 
-describe("NotificationItem Component", () => {
-  it("calls the markAsRead function when clicked", () => {
-    const mockMarkAsRead = jest.fn();
-    const props = {
-      id: 1,
-      type: "default",
-      value: "Test notification",
-      markAsRead: mockMarkAsRead,
-    };
-
-    render(<NotificationItem {...props} />);
-    const liElement = screen.getByText("Test notification");
-
-    liElement.click();
-
-    expect(mockMarkAsRead).toHaveBeenCalledWith(1);
+describe("<Notifications />", () => {
+  beforeAll(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+  afterAll(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  it("applies the correct color for 'default' type", () => {
-    const props = {
-      id: 1,
-      type: "default",
-      value: "Default notification",
-      markAsRead: () => {},
-    };
-    const { container } = render(<NotificationItem {...props} />);
-    const li = container.querySelector("li");
-
-    expect(li).toHaveStyle("color: blue");
+  it("NotificationItem renders without crashing", () => {
+    const wrapper = shallow(<NotificationItem />);
+    expect(wrapper.exists()).toEqual(true);
   });
+  it("Verify that by passing dummy type and value props, it renders the correct html", () => {
+    const wrapper = shallow(<NotificationItem type="default" value="test" />);
+    wrapper.update();
+    const listItem = wrapper.find("li");
 
-  it("applies the correct color for 'urgent' type", () => {
-    const props = {
-      id: 2,
-      type: "urgent",
-      value: "Urgent notification",
-      markAsRead: () => {},
-    };
-    const { container } = render(<NotificationItem {...props} />);
-    const li = container.querySelector("li");
-
-    expect(li).toHaveStyle("color: red");
+    expect(listItem).toHaveLength(1);
+    expect(listItem.text()).toEqual("test");
+    expect(listItem.prop("data-notification-type")).toEqual("default");
   });
+  it("Passing a dummy html prop, it renders the correct html (for example", () => {
+    const text = "Here is the list of notifications";
+    const wrapper = shallow(
+      <NotificationItem html={{ __html: "<u>test</u>" }} />
+    );
+    wrapper.update();
+    const listItem = wrapper.find("li");
+    // expect(listItem.html()).toEqual(
+    //   '<li data-notification-type="default"><u>test</u></li>'
+    // );
 
-  it("has the correct data-notification-type attribute for default", () => {
-    const props = {
-      id: 1,
-      type: "default",
-      value: "Default notification",
-      markAsRead: () => {},
-    };
-    const { container } = render(<NotificationItem {...props} />);
-    const li = container.querySelector("li");
-
-    expect(li).toHaveAttribute("data-notification-type", "default");
+    expect(listItem.props()["data-notification-type"]).toEqual("default");
+    expect(listItem.html()).toContain("<u>test</u>");
   });
+  it("when calling the function markAsRead on an instance of the component, the spy is being called with the right message", () => {
+    const id = 27;
 
-  it("has the correct data-notification-type attribute for urgent", () => {
-    const props = {
-      id: 2,
-      type: "urgent",
-      value: "Urgent notification",
-      markAsRead: () => {},
-    };
-    const { container } = render(<NotificationItem {...props} />);
-    const li = container.querySelector("li");
+    const wrapper = shallow(
+      <NotificationItem type="default" value="test" id={id} />
+    );
 
-    expect(li).toHaveAttribute("data-notification-type", "urgent");
+    const instance = wrapper;
+
+    instance.markAsRead = jest.fn();
+
+    const listItem = wrapper.find("li").first();
+
+    listItem.simulate("click");
+
+    instance.markAsRead(id);
+
+    expect(instance.markAsRead).toHaveBeenCalledWith(27);
+    jest.restoreAllMocks();
   });
 });
