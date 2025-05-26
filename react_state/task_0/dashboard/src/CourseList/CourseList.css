@@ -1,0 +1,18 @@
+table th {
+  border: 0.5px solid #ababab;
+}
+
+table {
+  width: 95%;
+  margin-top: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 300px;
+  border-spacing: 0px;
+  border: 0.5px solid #ababab;
+}
+
+table td {
+  border: 0.5px solid #ababab;
+  height: 20px;
+}
