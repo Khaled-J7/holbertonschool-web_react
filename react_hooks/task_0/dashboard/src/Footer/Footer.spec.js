@@ -6,12 +6,24 @@ import { newContext } from '../Context/context'; // Import the newContext
 
 describe('Footer component', () => {
 	it('renders without crashing', () => {
-		shallow(<Footer />);
+		// When shallow rendering a component that uses useContext,
+		// you typically need to wrap it in a Provider or mock the context.
+		// For a basic render check, a minimal Provider is sufficient.
+		shallow(
+			<newContext.Provider value={{ user: { isLoggedIn: false } }}>
+				<Footer />
+			</newContext.Provider>
+		);
 	});
 
 	it('renders the text "Copyright"', () => {
-		const wrapper = shallow(<Footer />);
-		expect(wrapper.text()).toContain('Copyright');
+		// For shallow tests, you might need to dive into the component rendered by the Provider
+		const wrapper = shallow(
+			<newContext.Provider value={{ user: { isLoggedIn: false } }}>
+				<Footer />
+			</newContext.Provider>
+		);
+		expect(wrapper.find('Footer').dive().text()).toContain('Copyright');
 	});
 
 	// New test: Verify that "Contact us" link is NOT displayed when logged out
